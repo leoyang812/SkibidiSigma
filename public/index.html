@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Route Optimization</title>
+    <title>Route Optimization - Step 1</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="cover"></div>
     <div class="container">
-        <h1>Route Optimization</h1>
-        <form id="optimization-form">
+        <h1>Route Optimization - Step 1</h1>
+        <form action="step2.html" method="GET">
             <div class="form-group">
                 <label for="start-address">Start Address:</label>
                 <input type="text" id="start-address" name="start-address" required>
@@ -19,33 +19,8 @@
                 <label for="start-city">Start City:</label>
                 <input type="text" id="start-city" name="start-city" required>
             </div>
-            <div id="waypoints">
-                <!-- Waypoints will be added here -->
-            </div>
-            <button type="button" onclick="addWaypoint()">Add Waypoint</button>
-            <div class="form-group">
-                <label for="end-address">End Address:</label>
-                <input type="text" id="end-address" name="end-address" required>
-            </div>
-            <div class="form-group">
-                <label for="end-city">End City:</label>
-                <input type="text" id="end-city" name="end-city" required>
-            </div>
-            <div class="form-group">
-                <label for="cargo">Cargo Amount (ft³):</label>
-                <input type="number" id="cargo" name="cargo" required>
-            </div>
-            <div class="form-group">
-                <label for="truck">Select Truck:</label>
-                <select id="truck" name="truck" required>
-                    <option value="500">500 ft³ - Small Truck</option>
-                    <option value="1000">1000 ft³ - Medium Truck</option>
-                    <option value="2000">2000 ft³ - Large Truck</option>
-                </select>
-            </div>
-            <button type="submit">Optimize</button>
+            <button type="submit">Next</button>
         </form>
     </div>
-    <script src="scripts.js"></script>
 </body>
 </html>
