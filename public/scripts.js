@@ -11,17 +11,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Initialize autocomplete for address inputs on page load
     const startLocationInput = document.getElementById('startLocation');
-    const endLocationInput = document.getElementById('end-address'); // Changed to match step3.html
+    const endLocationInput = document.getElementById('endLocation');
 
-    if (startLocationInput) {
-        initializeAutocomplete(startLocationInput);
-        startLocationInput.value = localStorage.getItem('startLocation') || '';
-    }
-
-    if (endLocationInput) {
-        initializeAutocomplete(endLocationInput);
-        endLocationInput.value = localStorage.getItem('endLocation') || '';
-    }
+    if (startLocationInput) initializeAutocomplete(startLocationInput);
+    if (endLocationInput) initializeAutocomplete(endLocationInput);
 
     // Initialize autocomplete for waypoints
     function initializeWaypointAutocomplete(waypointElement) {
@@ -55,30 +48,10 @@ document.addEventListener("DOMContentLoaded", () => {
         removeButton.textContent = 'Remove';
         removeButton.addEventListener('click', () => {
             waypointsContainer.removeChild(waypointDiv);
-            saveWaypoints();
         });
         waypointDiv.appendChild(removeButton);
 
         waypointsContainer.appendChild(waypointDiv);
-        saveWaypoints();
-    }
-
-    // Save waypoints to localStorage
-    function saveWaypoints() {
-        const waypoints = [];
-        document.querySelectorAll('#waypointsContainer .waypoint').forEach(waypointInput => {
-            waypoints.push(waypointInput.value);
-        });
-        localStorage.setItem('waypoints', JSON.stringify(waypoints));
-    }
-
-    // Load waypoints from localStorage
-    function loadWaypoints() {
-        const waypoints = JSON.parse(localStorage.getItem('waypoints')) || [];
-        waypoints.forEach(waypoint => {
-            addWaypoint();
-            document.querySelector('#waypointsContainer .waypoint:last-child').value = waypoint;
-        });
     }
 
     // Event listener for adding waypoints
@@ -87,95 +60,60 @@ document.addEventListener("DOMContentLoaded", () => {
         addWaypointButton.addEventListener('click', addWaypoint);
     }
 
+    // Save form data to session storage
+    function saveFormData() {
+        const startLocation = document.getElementById('startLocation')?.value || '';
+        const endLocation = document.getElementById('endLocation')?.value || '';
+        const waypoints = Array.from(document.querySelectorAll('#waypointsContainer .waypoint')).map(input => input.value);
+
+        sessionStorage.setItem('startLocation', startLocation);
+        sessionStorage.setItem('endLocation', endLocation);
+        sessionStorage.setItem('waypoints', JSON.stringify(waypoints));
+    }
+
+    // Load form data from session storage
+    function loadFormData() {
+        const startLocation = sessionStorage.getItem('startLocation');
+        const endLocation = sessionStorage.getItem('endLocation');
+        const waypoints = JSON.parse(sessionStorage.getItem('waypoints'));
+
+        if (startLocation) {
+            document.getElementById('startLocation').value = startLocation;
+        }
+
+        if (endLocation) {
+            document.getElementById('endLocation').value = endLocation;
+        }
+
+        if (waypoints) {
+            waypoints.forEach(value => {
+                addWaypoint();
+                const lastWaypointInput = document.querySelector('#waypointsContainer .waypoint:last-child');
+                lastWaypointInput.value = value;
+            });
+        }
+    }
+
+    // Load form data on page load
+    loadFormData();
+
     // Handle form submission
     const routeForm = document.getElementById('routeForm');
     const detailsForm = document.getElementById('detailsForm');
-    const reviewForm = document.getElementById('reviewForm');
 
-    async function handleSubmit(formElement) {
-        formElement.addEventListener('submit', async function(event) {
-            event.preventDefault();
+    if (routeForm) {
+        routeForm.addEventListener('submit', saveFormData);
+    }
+    if (detailsForm) {
+        detailsForm.addEventListener('submit', saveFormData);
+    }
 
-            const addresses = [];
-            if (startLocationInput) {
-                addresses.push({ address: startLocationInput.value });
-                localStorage.setItem('startLocation', startLocationInput.value);
-            }
-
-            if (document.querySelectorAll('#waypointsContainer .waypoint')) {
-                document.querySelectorAll('#waypointsContainer .waypoint').forEach(waypointInput => {
-                    addresses.push({ address: waypointInput.value });
-                });
-                saveWaypoints();
-            }
-
-            if (endLocationInput) {
-                addresses.push({ address: endLocationInput.value });
-                localStorage.setItem('endLocation', endLocationInput.value);
-            }
-
-            const totalFreight = document.getElementById('totalFreight')?.value;
-            const numTrucks = document.getElementById('numTrucks')?.value;
-            const truckCapacity = document.getElementById('truckCapacity')?.value;
-
-            // Replace with your API endpoint
-            const response = await fetch('/api/optimize', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    addresses,
-                    totalFreight,
-                    numTrucks,
-                    truckCapacity
-                }),
-            });
-
-            const result = await response.json();
-            // Handle result
-            console.log(result);
+    // Handle back button functionality
+    const backButton = document.getElementById('backButton');
+    if (backButton) {
+        backButton.addEventListener('click', () => {
+            saveFormData();
+            window.history.back();
         });
     }
-
-    if (routeForm) handleSubmit(routeForm);
-    if (detailsForm) handleSubmit(detailsForm);
-    if (reviewForm) handleSubmit(reviewForm);
-
-    // Load waypoints on page load
-    loadWaypoints();
 });
-
-// Initialize the map on step5.html
-function initMap() {
-    const mapOptions = {
-        center: { lat: 45.4215, lng: -75.6972 }, // Default center is Ottawa
-        zoom: 7,
-        mapTypeId: 'roadmap'
-    };
-
-    const map = new google.maps.Map(document.getElementById('map'), mapOptions);
-
-    // Dummy route for demonstration
-    const route = [
-        { lat: 45.4215, lng: -75.6972 }, // Ottawa
-        { lat: 46.8139, lng: -71.2082 }  // Quebec City
-    ];
-
-    const path = new google.maps.Polyline({
-        path: route,
-        geodesic: true,
-        strokeColor: '#FF0000',
-        strokeOpacity: 1.0,
-        strokeWeight: 2
-    });
-
-    path.setMap(map);
-}
-
-// Call initMap if you need a map display
-window.onload = () => {
-    if (document.getElementById('map')) {
-        initMap();
-    }
-};
