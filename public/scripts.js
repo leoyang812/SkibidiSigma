@@ -60,3 +60,49 @@ document.getElementById('optimization-form').addEventListener('submit', async fu
     const result = await response.json();
     // Handle result...
 });
+document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("optimization-form");
+    const waypointsContainer = document.getElementById("waypoints");
+
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        // Gather form data
+        const startAddress = document.getElementById("start-address").value;
+        const startCity = document.getElementById("start-city").value;
+        const endAddress = document.getElementById("end-address").value;
+        const endCity = document.getElementById("end-city").value;
+        const cargo = document.getElementById("cargo").value;
+        const truck = document.getElementById("truck").value;
+        
+        const waypoints = [];
+        const waypointAddresses = document.querySelectorAll(".waypoint-address");
+        const waypointCities = document.querySelectorAll(".waypoint-city");
+        
+        for (let i = 0; i < waypointAddresses.length; i++) {
+            waypoints.push({
+                address: waypointAddresses[i].value,
+                city: waypointCities[i].value
+            });
+        }
+        
+        // Call your backend API with the data here
+        console.log({ startAddress, startCity, endAddress, endCity, waypoints, cargo, truck });
+    });
+
+    window.addWaypoint = () => {
+        const waypoint = document.createElement("div");
+        waypoint.classList.add("form-group");
+        waypoint.innerHTML = `
+            <label for="waypoint-address">Waypoint Address:</label>
+            <input type="text" class="waypoint-address" name="waypoint-address">
+            <label for="waypoint-city">Waypoint City:</label>
+            <input type="text" class="waypoint-city" name="waypoint-city">
+            <button type="button" class="remove-waypoint" onclick="removeWaypoint(this)">Remove</button>
+        `;
+        waypointsContainer.appendChild(waypoint);
+    };
+
+    window.removeWaypoint = (button) => {
+        button.parentElement.remove();
+    };
+});
