@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Route Optimization</title>
+    <title>Route Optimization - Step 1</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBLWsl5v2a7kj2ggZnTuAhHt3WzamVNPE0&libraries=places" defer></script>
     <script src="script.js" defer></script>
@@ -13,47 +13,16 @@
         <h1>Route Optimization Tool</h1>
     </header>
     <main>
-        <section>
+        <section class="container">
             <h2>Enter Your Details</h2>
-            <form id="routeForm">
+            <form id="routeForm" action="step2.html" method="GET">
                 <div>
                     <label for="startLocation">Start Location:</label>
-                    <input id="startLocation" type="text" placeholder="Start address">
+                    <input id="startLocation" type="text" placeholder="Start address" required>
                 </div>
-                <div>
-                    <label for="endLocation">End Location:</label>
-                    <input id="endLocation" type="text" placeholder="End address">
-                </div>
-                <div id="waypointsContainer">
-                    <!-- Waypoints will be added here -->
-                </div>
-                <button type="button" id="addWaypoint">Add Waypoint</button>
-                <div>
-                    <label for="totalFreight">Total Freight (in cubic feet):</label>
-                    <input id="totalFreight" type="number" placeholder="Total freight">
-                </div>
-                <div>
-                    <label for="numTrucks">Number of Trucks:</label>
-                    <input id="numTrucks" type="number" placeholder="Number of trucks">
-                </div>
-                <div>
-                    <label for="truckCapacity">Truck Capacity (in cubic feet):</label>
-                    <select id="truckCapacity">
-                        <option value="0-1000">0-1000</option>
-                        <option value="1000-3000">1000-3000</option>
-                        <option value="3000+">3000+</option>
-                    </select>
-                </div>
-                <button type="submit">Optimize Route</button>
+                <button type="submit">Next</button>
             </form>
         </section>
-        <section>
-            <h2>Map</h2>
-            <div id="map" style="height: 400px; width: 100%;"></div>
-        </section>
-        <nav>
-            <button onclick="location.href='step2.html'">Next</button>
-        </nav>
     </main>
     <footer>
         <p>© 2024 Route Optimization Tool</p>

@@ -71,13 +71,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const addresses = [];
             if (startLocationInput) addresses.push({ address: startLocationInput.value });
-            
+
             if (document.querySelectorAll('#waypointsContainer .waypoint')) {
                 document.querySelectorAll('#waypointsContainer .waypoint').forEach(waypointInput => {
                     addresses.push({ address: waypointInput.value });
                 });
             }
-            
+
             if (endLocationInput) addresses.push({ address: endLocationInput.value });
 
             const totalFreight = document.getElementById('totalFreight')?.value;
