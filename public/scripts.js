@@ -31,16 +31,21 @@ document.addEventListener("DOMContentLoaded", () => {
         const waypointsContainer = document.getElementById('waypointsContainer');
         if (!waypointsContainer) return;
 
+        const waypointDiv = document.createElement('div');
+        waypointDiv.classList.add('form-group');
+
         const waypointInput = document.createElement('input');
         waypointInput.classList.add('waypoint');
         waypointInput.type = 'text';
         waypointInput.placeholder = 'Add waypoint address';
         initializeWaypointAutocomplete(waypointInput);
-
-        // Create a container for the new waypoint input and its remove button
-        const waypointDiv = document.createElement('div');
-        waypointDiv.classList.add('form-group');
         waypointDiv.appendChild(waypointInput);
+
+        const dropOffInput = document.createElement('input');
+        dropOffInput.type = 'number';
+        dropOffInput.placeholder = 'Drop-off Amount';
+        dropOffInput.classList.add('waypoint-amount');
+        waypointDiv.appendChild(dropOffInput);
 
         const removeButton = document.createElement('button');
         removeButton.type = 'button';
@@ -65,10 +70,12 @@ document.addEventListener("DOMContentLoaded", () => {
         const startLocation = document.getElementById('startLocation')?.value || '';
         const endLocation = document.getElementById('endLocation')?.value || '';
         const waypoints = Array.from(document.querySelectorAll('#waypointsContainer .waypoint')).map(input => input.value);
+        const dropOffs = Array.from(document.querySelectorAll('#waypointsContainer .waypoint-amount')).map(input => input.value);
 
         sessionStorage.setItem('startLocation', startLocation);
         sessionStorage.setItem('endLocation', endLocation);
         sessionStorage.setItem('waypoints', JSON.stringify(waypoints));
+        sessionStorage.setItem('dropOffs', JSON.stringify(dropOffs));
     }
 
     // Load form data from session storage
@@ -76,6 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const startLocation = sessionStorage.getItem('startLocation');
         const endLocation = sessionStorage.getItem('endLocation');
         const waypoints = JSON.parse(sessionStorage.getItem('waypoints'));
+        const dropOffs = JSON.parse(sessionStorage.getItem('dropOffs'));
 
         if (startLocation) {
             document.getElementById('startLocation').value = startLocation;
@@ -85,11 +93,13 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById('endLocation').value = endLocation;
         }
 
-        if (waypoints) {
-            waypoints.forEach(value => {
+        if (waypoints && dropOffs) {
+            waypoints.forEach((value, index) => {
                 addWaypoint();
                 const lastWaypointInput = document.querySelector('#waypointsContainer .waypoint:last-child');
+                const lastDropOffInput = document.querySelector('#waypointsContainer .waypoint-amount:last-child');
                 lastWaypointInput.value = value;
+                lastDropOffInput.value = dropOffs[index];
             });
         }
     }

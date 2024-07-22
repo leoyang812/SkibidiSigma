@@ -5,25 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Route Optimization - Step 2</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBLWsl5v2a7kj2ggZnTuAhHt3WzamVNPE0&libraries=places"></script>
 </head>
 <body>
     <div class="cover"></div>
     <div class="container">
         <h1>Route Optimization - Step 2</h1>
-        <form id="detailsForm" action="step3.html" method="GET">
+        <form id="routeForm">
             <div class="form-group">
-                <label for="endLocation">Ending Address:</label>
-                <input type="text" id="endLocation" name="endLocation" required>
+                <label for="startLocation">Starting Address:</label>
+                <input type="text" id="startLocation" name="startLocation" required>
             </div>
-            <div id="waypointsContainer" class="form-group">
-                <!-- Waypoints will be added here -->
+            <div id="waypointsContainer">
+                <!-- Waypoints will be dynamically added here -->
             </div>
-            <button type="button" id="addWaypoint">Add a Waypoint</button>
+            <button type="button" id="addWaypoint">Add Waypoint</button>
             <button type="submit">Next</button>
-            <button type="button" id="backButton">Back</button>
         </form>
+        <a href="index.html" class="back-button">Back</a>
     </div>
-    <script src="scripts.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBLWsl5v2a7kj2ggZnTuAhHt3WzamVNPE0&libraries=places"></script>
+    <script src="script.js"></script>
 </body>
 </html>
