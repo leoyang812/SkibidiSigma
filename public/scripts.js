@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // Initialize autocomplete for addresses
+    // Initialize autocomplete for address inputs
     function initializeAutocomplete(inputElement) {
         new google.maps.places.Autocomplete(inputElement, {
             types: ['address'],
@@ -7,11 +7,12 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Initialize autocomplete for the start and end addresses
+    // Initialize autocomplete for address inputs on page load
     const startLocationInput = document.getElementById('startLocation');
     const endLocationInput = document.getElementById('endLocation');
-    initializeAutocomplete(startLocationInput);
-    initializeAutocomplete(endLocationInput);
+
+    if (startLocationInput) initializeAutocomplete(startLocationInput);
+    if (endLocationInput) initializeAutocomplete(endLocationInput);
 
     // Initialize autocomplete for waypoints
     function initializeWaypointAutocomplete(waypointElement) {
@@ -21,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Add a waypoint input
+    // Add a waypoint input field
     function addWaypoint() {
         const waypointsContainer = document.getElementById('waypointsContainer');
         const waypointInput = document.createElement('input');
@@ -56,7 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const addresses = [];
         addresses.push({ address: startLocationInput.value });
-        
+
         document.querySelectorAll('#waypointsContainer .waypoint').forEach(waypointInput => {
             addresses.push({ address: waypointInput.value });
         });

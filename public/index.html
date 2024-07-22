@@ -3,59 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Route Optimization</title>
+    <title>Route Optimization - Step 1</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBLWsl5v2a7kj2ggZnTuAhHt3WzamVNPE0&libraries=places" defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA1B2C3D4E5F6G7H8I9J0K1L2M3N4O5P6Q7R8S&libraries=places" defer></script>
     <script src="script.js" defer></script>
 </head>
 <body>
     <header>
-        <h1>Route Optimization Tool</h1>
+        <h1>Route Optimization - Step 1</h1>
     </header>
     <main>
-        <section>
-            <h2>Enter Your Details</h2>
-            <form id="routeForm">
-                <div>
-                    <label for="startLocation">Start Location:</label>
-                    <input id="startLocation" type="text" placeholder="Start address, city, province" required>
-                </div>
-                <div>
-                    <label for="endLocation">End Location:</label>
-                    <input id="endLocation" type="text" placeholder="End address, city, province" required>
-                </div>
-                <div>
-                    <label for="waypoints">Waypoints:</label>
-                    <div id="waypointsContainer">
-                        <input class="waypoint" type="text" placeholder="Add waypoint address">
-                    </div>
-                    <button type="button" id="addWaypoint">Add Waypoint</button>
-                </div>
-                <div>
-                    <label for="totalFreight">Total Freight (in cubic feet):</label>
-                    <input id="totalFreight" type="number" placeholder="Total freight" required>
-                </div>
-                <div>
-                    <label for="numTrucks">Number of Trucks:</label>
-                    <input id="numTrucks" type="number" placeholder="Number of trucks" required>
-                </div>
-                <div>
-                    <label for="truckCapacity">Truck Capacity (in cubic feet):</label>
-                    <select id="truckCapacity">
-                        <option value="5000">5000</option>
-                        <option value="6000">6000</option>
-                        <option value="7000">7000</option>
-                        <option value="8000">8000</option>
-                        <option value="9000">9000</option>
-                    </select>
-                </div>
-                <button type="submit">Optimize Route</button>
-            </form>
-        </section>
-        <section>
-            <h2>Map</h2>
-            <div id="map"></div>
-        </section>
+        <form action="step2.html" method="GET" id="start-form">
+            <div>
+                <label for="startLocation">Start Location:</label>
+                <input id="startLocation" type="text" placeholder="Start address, city, province">
+            </div>
+            <div>
+                <label for="totalFreight">Total Freight (in cubic feet):</label>
+                <input id="totalFreight" type="number" placeholder="Total freight">
+            </div>
+            <div>
+                <label for="numTrucks">Number of Trucks:</label>
+                <input id="numTrucks" type="number" placeholder="Number of trucks">
+            </div>
+            <button type="submit">Next</button>
+        </form>
     </main>
     <footer>
         <p>© 2024 Route Optimization Tool</p>
