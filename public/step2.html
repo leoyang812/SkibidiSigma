@@ -5,36 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Route Optimization - Step 2</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBLWsl5v2a7kj2ggZnTuAhHt3WzamVNPE0&libraries=places" defer></script>
+    <script src="script.js" defer></script>
 </head>
 <body>
     <div class="cover"></div>
     <div class="container">
         <h1>Route Optimization - Step 2</h1>
-        <form action="step3.html" method="GET" id="waypoint-form">
-            <div id="waypoints">
+        <form id="waypointForm" action="step3.html" method="GET">
+            <div id="waypointsContainer">
                 <!-- Waypoints will be added here -->
             </div>
-            <button type="button" onclick="addWaypoint()">Add Waypoint</button>
+            <button type="button" id="addWaypoint">Add Waypoint</button>
             <button type="submit">Next</button>
         </form>
     </div>
     <script>
+        function initializeWaypointAutocomplete(waypointElement) {
+            new google.maps.places.Autocomplete(waypointElement, {
+                types: ['address'],
+                componentRestrictions: { country: 'ca' } // Restrict to Canada
+            });
+        }
+
         function addWaypoint() {
-            const waypointContainer = document.createElement('div');
-            waypointContainer.classList.add('form-group');
-            waypointContainer.innerHTML = `
+            const waypointsContainer = document.getElementById('waypointsContainer');
+            const waypointDiv = document.createElement('div');
+            waypointDiv.classList.add('form-group');
+            waypointDiv.innerHTML = `
                 <label for="waypoint-address">Waypoint Address:</label>
                 <input type="text" class="waypoint-address" name="waypoint-address" required>
-                <label for="waypoint-city">Waypoint City:</label>
-                <input type="text" class="waypoint-city" name="waypoint-city" required>
-                <button type="button" onclick="removeWaypoint(this)">Remove</button>
+                <button type="button" class="remove-waypoint" onclick="removeWaypoint(this)">Remove</button>
             `;
-            document.getElementById('waypoints').appendChild(waypointContainer);
+            waypointsContainer.appendChild(waypointDiv);
+
+            const waypointInput = waypointDiv.querySelector('.waypoint-address');
+            initializeWaypointAutocomplete(waypointInput);
         }
 
         function removeWaypoint(button) {
             button.parentElement.remove();
         }
+
+        document.getElementById('addWaypoint').addEventListener('click', addWaypoint);
     </script>
 </body>
 </html>
