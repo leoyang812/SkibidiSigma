@@ -106,3 +106,55 @@ document.addEventListener("DOMContentLoaded", () => {
         button.parentElement.remove();
     };
 });
+function initAutocomplete() {
+    const startInput = document.getElementById('startLocation');
+    const endInput = document.getElementById('endLocation');
+    const waypointInput = document.getElementById('waypoints');
+
+    const options = {
+        types: ['(cities)'], // Restrict results to cities
+        componentRestrictions: { country: 'ca' } // Restrict to Canada
+    };
+
+    const startAutocomplete = new google.maps.places.Autocomplete(startInput, options);
+    const endAutocomplete = new google.maps.places.Autocomplete(endInput, options);
+    const waypointAutocomplete = new google.maps.places.Autocomplete(waypointInput, options);
+
+    // Initialize the map
+    const mapOptions = {
+        center: { lat: 45.4215, lng: -75.6972 }, // Default center is Ottawa
+        zoom: 7,
+        mapTypeId: 'roadmap'
+    };
+
+    const map = new google.maps.Map(document.getElementById('map'), mapOptions);
+
+    // Handle form submission
+    document.getElementById('routeForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        // Handle route optimization logic here
+        // For now, just log the inputs
+        console.log('Start Location:', startInput.value);
+        console.log('End Location:', endInput.value);
+        console.log('Waypoints:', waypointInput.value);
+        console.log('Total Freight:', document.getElementById('totalFreight').value);
+        console.log('Number of Trucks:', document.getElementById('numTrucks').value);
+        console.log('Truck Capacity:', document.getElementById('truckCapacity').value);
+    });
+
+    // Handle adding waypoints
+    document.getElementById('addWaypoint').addEventListener('click', function() {
+        const waypoint = waypointInput.value;
+        if (waypoint) {
+            console.log('Waypoint added:', waypoint);
+            // Add waypoint to your list of waypoints
+            waypointInput.value = '';
+        } else {
+            alert('Please enter a waypoint.');
+        }
+    });
+}
+
+// Initialize the autocomplete functionality when the window loads
+window.onload = initAutocomplete;
+
