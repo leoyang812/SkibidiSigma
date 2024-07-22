@@ -63,7 +63,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // Save form data to session storage
     function saveFormData() {
         const waypoints = Array.from(document.querySelectorAll('#waypointsContainer .waypoint')).map(input => input.value);
-
         sessionStorage.setItem('waypoints', JSON.stringify(waypoints));
     }
 
@@ -85,7 +84,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Handle form submission
     const routeForm = document.getElementById('routeForm');
-
     if (routeForm) {
         routeForm.addEventListener('submit', () => {
             saveFormData();
