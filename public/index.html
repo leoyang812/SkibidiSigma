@@ -4,39 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Route Optimization</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS file -->
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <div class="cover"></div>
     <div class="container">
         <h1>Route Optimization</h1>
         <form id="optimization-form">
             <div class="form-group">
-                <label for="start-address">Start Address:</label>
-                <input type="text" id="start-address" name="start-address" required>
-                <label for="start-city">City:</label>
-                <input type="text" id="start-city" name="start-city" required>
-            </div>
-            <div id="waypoints-container">
-                <h3>Waypoints</h3>
-            </div>
-            <button type="button" id="add-waypoint">Add Waypoint</button>
-            <div class="form-group">
-                <label for="goal-address">Goal Address:</label>
-                <input type="text" id="goal-address" name="goal-address" required>
-                <label for="goal-city">City:</label>
-                <input type="text" id="goal-city" name="goal-city" required>
+                <label for="address">Address:</label>
+                <input type="text" id="address" name="address">
             </div>
             <div class="form-group">
-                <label for="truck-capacity-range">Select Truck Capacity Range:</label>
-                <select id="truck-capacity-range">
-                    <option value="500-1000">500 - 1000 cubic feet</option>
-                    <option value="1000-1500">1000 - 1500 cubic feet</option>
-                    <option value="1500-2000">1500 - 2000 cubic feet</option>
+                <label for="city">City:</label>
+                <input type="text" id="city" name="city">
+            </div>
+            <div id="waypoints">
+                <!-- Waypoints will be added here -->
+            </div>
+            <button type="button" onclick="addWaypoint()">Add Waypoint</button>
+            <div class="form-group">
+                <label for="cargo">Cargo Amount (ft³):</label>
+                <input type="number" id="cargo" name="cargo">
+            </div>
+            <div class="form-group">
+                <label for="truck">Select Truck:</label>
+                <select id="truck" name="truck">
+                    <option value="500">500 ft³ - Small Truck</option>
+                    <option value="1000">1000 ft³ - Medium Truck</option>
+                    <option value="2000">2000 ft³ - Large Truck</option>
                 </select>
-            </div>
-            <div class="form-group">
-                <label for="num-trucks">Number of Trucks:</label>
-                <input type="number" id="num-trucks" name="num-trucks" required>
             </div>
             <button type="submit">Optimize</button>
         </form>
