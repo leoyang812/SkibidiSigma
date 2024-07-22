@@ -131,3 +131,47 @@ app.post('/optimize', async (req, res) => {
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
 });
+const trucksDatabase = [
+    { model: 'Small Truck', minCapacity: 500, maxCapacity: 1000 },
+    { model: 'Medium Truck', minCapacity: 1000, maxCapacity: 1500 },
+    { model: 'Large Truck', minCapacity: 1500, maxCapacity: 2000 }
+];
+
+module.exports = async (req, res) => {
+    if (req.method === 'POST') {
+        const { addresses, cargoByStop, numTrucks, truckCapacityRange } = req.body;
+
+        // Validate truck capacity range
+        const truck = trucksDatabase.find(t => 
+            truckCapacityRange >= t.minCapacity && truckCapacityRange <= t.maxCapacity
+        );
+
+        if (!truck) {
+            return res.status(400).json({ error: `Invalid truck capacity: ${truckCapacityRange}` });
+        }
+
+        const graph = new Graph();
+        const coordinates = {};
+
+        for (const { address, city } of addresses) {
+            if (!canadianCities.has(city)) {
+                return res.status(400).json({ error: `Invalid city: ${city}` });
+            }
+
+            const coords = await geocodeAddress(address, city);
+            if (!coords) {
+                return res.status(400).json({ error: `Invalid address: ${address}, ${city}` });
+            }
+
+            const fullAddress = `${address}, ${city}`;
+            coordinates[fullAddress] = coords;
+            graph.addNode(fullAddress);
+        }
+
+        // Add edges and other logic here...
+
+        res.status(200).json({ /* Response data */ });
+    } else {
+        res.status(405).json({ error: 'Method not allowed' });
+    }
+};
