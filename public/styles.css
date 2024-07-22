@@ -1,45 +1,58 @@
+/* styles.css */
+
+/* General styling */
 body {
     font-family: Arial, sans-serif;
-    background-image: url('images/download.png'); /* Path to your transparent image */
-    background-size: cover;
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
-header {
-    text-align: center;
-    padding: 20px;
-}
-
-main {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 80vh;
-}
-
+/* Container styling */
 .container {
-    background: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
-    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.9); /* White background with slight transparency */
+    border-radius: 8px;
     padding: 20px;
-    max-width: 600px;
-    width: 100%;
+    max-width: 800px;
+    margin: 50px auto;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-footer {
-    text-align: center;
-    padding: 10px;
-    background: rgba(0, 0, 0, 0.1);
+/* Cover image */
+.cover {
+    background: url('images/download.jpg') no-repeat center center fixed;
+    background-size: cover;
+    height: 100vh;
 }
 
-form div {
+/* Form styling */
+.form-group {
     margin-bottom: 15px;
 }
 
-input {
+input[type="text"], input[type="number"], select {
     width: 100%;
     padding: 10px;
+    border-radius: 4px;
     border: 1px solid #ddd;
-    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
 }
