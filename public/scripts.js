@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Initialize autocomplete for address inputs on page load
     const startLocationInput = document.getElementById('startLocation');
-    const endLocationInput = document.getElementById('end-address'); // Updated to match step3.html
+    const endLocationInput = document.getElementById('endLocation');
 
     if (startLocationInput) initializeAutocomplete(startLocationInput);
     if (endLocationInput) initializeAutocomplete(endLocationInput);
@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Save form data to session storage
     function saveFormData() {
         const startLocation = document.getElementById('startLocation')?.value || '';
-        const endLocation = document.getElementById('end-address')?.value || ''; // Updated to match step3.html
+        const endLocation = document.getElementById('endLocation')?.value || '';
         const waypoints = Array.from(document.querySelectorAll('#waypointsContainer .waypoint')).map(input => input.value);
 
         sessionStorage.setItem('startLocation', startLocation);
@@ -82,7 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         if (endLocation) {
-            document.getElementById('end-address').value = endLocation; // Updated to match step3.html
+            document.getElementById('endLocation').value = endLocation;
         }
 
         if (waypoints) {
