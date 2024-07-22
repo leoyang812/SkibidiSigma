@@ -68,7 +68,7 @@ function dijkstra(graph, initial, cargoByStop, totalCargoCapacity) {
         graph.edges[minNode].forEach(edge => {
             const weight = currentWeight + graph.distances[`${minNode}-${edge}`];
             const newCargo = cargoLoaded[minNode] + (cargoByStop[edge] || 0);
-            if (!(edge in visited) || weight < visited[edge] && newCargo <= totalCargoCapacity) {
+            if (!(edge in visited) || (weight < visited[edge] && newCargo <= totalCargoCapacity)) {
                 visited[edge] = weight;
                 path[edge] = minNode;
                 cargoLoaded[edge] = newCargo;
@@ -102,20 +102,71 @@ function calculateTotalDistance(graph, path) {
     return totalDistance;
 }
 
+// Geocode address to get coordinates
+async function geocodeAddress(address) {
+    const apiKey = 'AIzaSyBLWsl5v2a7kj2ggZnTuAhHt3WzamVNPE0';
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`;
+
+    try {
+        const response = await axios.get(url);
+        const { results } = response.data;
+        if (results.length > 0) {
+            const { lat, lng } = results[0].geometry.location;
+            return [lat, lng];
+        } else {
+            throw new Error('No results found');
+        }
+    } catch (error) {
+        console.error(`Error geocoding address ${address}: ${error.message}`);
+        return null;
+    }
+}
+
 // Route optimization endpoint
 app.post('/optimize', async (req, res) => {
-    const { startAddress, goalAddress, cargoCapacity, numTrucks, cargoByStop } = req.body;
+    const { startAddress, goalAddress, cargoCapacity, numTrucks, cargoByStop, waypoints } = req.body;
     const totalCargoCapacity = numTrucks * cargoCapacity;
 
     // Initialize the graph and geocode addresses
     const graph = new Graph();
     const coordinates = {};
 
-    // Add nodes and edges (mock example, replace with actual geocoding)
+    // Geocode the start and goal addresses
+    const startCoords = await geocodeAddress(startAddress);
+    const goalCoords = await geocodeAddress(goalAddress);
+
+    if (!startCoords || !goalCoords) {
+        return res.status(400).json({ error: 'Invalid start or goal address' });
+    }
+
     graph.addNode(startAddress);
+    coordinates[startAddress] = startCoords;
+
     graph.addNode(goalAddress);
-    const distance = haversine([0, 0], [1, 1]); // Mock coordinates
-    graph.addEdge(startAddress, goalAddress, distance);
+    coordinates[goalAddress] = goalCoords;
+
+    // Geocode waypoints and add nodes and edges to the graph
+    for (const waypoint of waypoints) {
+        const waypointCoords = await geocodeAddress(waypoint);
+        if (!waypointCoords) {
+            return res.status(400).json({ error: `Invalid waypoint address: ${waypoint}` });
+        }
+
+        graph.addNode(waypoint);
+        coordinates[waypoint] = waypointCoords;
+
+        // Add edges between all nodes (fully connected graph)
+        for (const [existingNode, existingCoords] of Object.entries(coordinates)) {
+            if (existingNode !== waypoint) {
+                const distance = haversine(existingCoords, waypointCoords);
+                graph.addEdge(existingNode, waypoint, distance);
+            }
+        }
+    }
+
+    // Add edge between start and goal if not already done
+    const distanceStartGoal = haversine(startCoords, goalCoords);
+    graph.addEdge(startAddress, goalAddress, distanceStartGoal);
 
     // Calculate route
     const { visited, path } = dijkstra(graph, startAddress, cargoByStop, totalCargoCapacity);
@@ -131,47 +182,3 @@ app.post('/optimize', async (req, res) => {
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
 });
-const trucksDatabase = [
-    { model: 'Small Truck', minCapacity: 500, maxCapacity: 1000 },
-    { model: 'Medium Truck', minCapacity: 1000, maxCapacity: 1500 },
-    { model: 'Large Truck', minCapacity: 1500, maxCapacity: 2000 }
-];
-
-module.exports = async (req, res) => {
-    if (req.method === 'POST') {
-        const { addresses, cargoByStop, numTrucks, truckCapacityRange } = req.body;
-
-        // Validate truck capacity range
-        const truck = trucksDatabase.find(t => 
-            truckCapacityRange >= t.minCapacity && truckCapacityRange <= t.maxCapacity
-        );
-
-        if (!truck) {
-            return res.status(400).json({ error: `Invalid truck capacity: ${truckCapacityRange}` });
-        }
-
-        const graph = new Graph();
-        const coordinates = {};
-
-        for (const { address, city } of addresses) {
-            if (!canadianCities.has(city)) {
-                return res.status(400).json({ error: `Invalid city: ${city}` });
-            }
-
-            const coords = await geocodeAddress(address, city);
-            if (!coords) {
-                return res.status(400).json({ error: `Invalid address: ${address}, ${city}` });
-            }
-
-            const fullAddress = `${address}, ${city}`;
-            coordinates[fullAddress] = coords;
-            graph.addNode(fullAddress);
-        }
-
-        // Add edges and other logic here...
-
-        res.status(200).json({ /* Response data */ });
-    } else {
-        res.status(405).json({ error: 'Method not allowed' });
-    }
-};

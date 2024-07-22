@@ -13,8 +13,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const startLocationInput = document.getElementById('startLocation');
     const endLocationInput = document.getElementById('end-address'); // Changed to match step3.html
 
-    if (startLocationInput) initializeAutocomplete(startLocationInput);
-    if (endLocationInput) initializeAutocomplete(endLocationInput);
+    if (startLocationInput) {
+        initializeAutocomplete(startLocationInput);
+        startLocationInput.value = localStorage.getItem('startLocation') || '';
+    }
+
+    if (endLocationInput) {
+        initializeAutocomplete(endLocationInput);
+        endLocationInput.value = localStorage.getItem('endLocation') || '';
+    }
 
     // Initialize autocomplete for waypoints
     function initializeWaypointAutocomplete(waypointElement) {
@@ -48,10 +55,30 @@ document.addEventListener("DOMContentLoaded", () => {
         removeButton.textContent = 'Remove';
         removeButton.addEventListener('click', () => {
             waypointsContainer.removeChild(waypointDiv);
+            saveWaypoints();
         });
         waypointDiv.appendChild(removeButton);
 
         waypointsContainer.appendChild(waypointDiv);
+        saveWaypoints();
+    }
+
+    // Save waypoints to localStorage
+    function saveWaypoints() {
+        const waypoints = [];
+        document.querySelectorAll('#waypointsContainer .waypoint').forEach(waypointInput => {
+            waypoints.push(waypointInput.value);
+        });
+        localStorage.setItem('waypoints', JSON.stringify(waypoints));
+    }
+
+    // Load waypoints from localStorage
+    function loadWaypoints() {
+        const waypoints = JSON.parse(localStorage.getItem('waypoints')) || [];
+        waypoints.forEach(waypoint => {
+            addWaypoint();
+            document.querySelector('#waypointsContainer .waypoint:last-child').value = waypoint;
+        });
     }
 
     // Event listener for adding waypoints
@@ -62,23 +89,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Handle form submission
     const routeForm = document.getElementById('routeForm');
-    const detailsForm = document.getElementById('details-form');
-    const reviewForm = document.getElementById('review-form');
+    const detailsForm = document.getElementById('detailsForm');
+    const reviewForm = document.getElementById('reviewForm');
 
     async function handleSubmit(formElement) {
         formElement.addEventListener('submit', async function(event) {
             event.preventDefault();
 
             const addresses = [];
-            if (startLocationInput) addresses.push({ address: startLocationInput.value });
+            if (startLocationInput) {
+                addresses.push({ address: startLocationInput.value });
+                localStorage.setItem('startLocation', startLocationInput.value);
+            }
 
             if (document.querySelectorAll('#waypointsContainer .waypoint')) {
                 document.querySelectorAll('#waypointsContainer .waypoint').forEach(waypointInput => {
                     addresses.push({ address: waypointInput.value });
                 });
+                saveWaypoints();
             }
 
-            if (endLocationInput) addresses.push({ address: endLocationInput.value });
+            if (endLocationInput) {
+                addresses.push({ address: endLocationInput.value });
+                localStorage.setItem('endLocation', endLocationInput.value);
+            }
 
             const totalFreight = document.getElementById('totalFreight')?.value;
             const numTrucks = document.getElementById('numTrucks')?.value;
@@ -107,6 +141,9 @@ document.addEventListener("DOMContentLoaded", () => {
     if (routeForm) handleSubmit(routeForm);
     if (detailsForm) handleSubmit(detailsForm);
     if (reviewForm) handleSubmit(reviewForm);
+
+    // Load waypoints on page load
+    loadWaypoints();
 });
 
 // Initialize the map on step5.html
