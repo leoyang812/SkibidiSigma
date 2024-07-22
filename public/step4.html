@@ -1,1 +1,30 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Route Optimization - Step 4</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="cover"></div>
+    <div class="container">
+        <h1>Route Optimization - Step 4</h1>
+        <form action="step5.html" method="GET">
+            <div class="form-group">
+                <label for="cargo">Cargo Amount (ft³):</label>
+                <input type="number" id="cargo" name="cargo" required>
+            </div>
+            <div class="form-group">
+                <label for="truck">Select Truck:</label>
+                <select id="truck" name="truck" required>
+                    <option value="500">500 ft³ - Small Truck</option>
+                    <option value="1000">1000 ft³ - Medium Truck</option>
+                    <option value="2000">2000 ft³ - Large Truck</option>
+                </select>
+            </div>
+            <button type="submit">Next</button>
+        </form>
+    </div>
+</body>
+</html>
