@@ -62,28 +62,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Save form data to session storage
     function saveFormData() {
-        const startLocation = document.getElementById('startLocation')?.value || '';
-        const endLocation = document.getElementById('endLocation')?.value || '';
         const waypoints = Array.from(document.querySelectorAll('#waypointsContainer .waypoint')).map(input => input.value);
 
-        sessionStorage.setItem('startLocation', startLocation);
-        sessionStorage.setItem('endLocation', endLocation);
         sessionStorage.setItem('waypoints', JSON.stringify(waypoints));
     }
 
     // Load form data from session storage
     function loadFormData() {
-        const startLocation = sessionStorage.getItem('startLocation');
-        const endLocation = sessionStorage.getItem('endLocation');
         const waypoints = JSON.parse(sessionStorage.getItem('waypoints'));
-
-        if (startLocation) {
-            document.getElementById('startLocation').value = startLocation;
-        }
-
-        if (endLocation) {
-            document.getElementById('endLocation').value = endLocation;
-        }
 
         if (waypoints) {
             waypoints.forEach(value => {
@@ -99,13 +85,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Handle form submission
     const routeForm = document.getElementById('routeForm');
-    const detailsForm = document.getElementById('detailsForm');
 
     if (routeForm) {
-        routeForm.addEventListener('submit', saveFormData);
-    }
-    if (detailsForm) {
-        detailsForm.addEventListener('submit', saveFormData);
+        routeForm.addEventListener('submit', () => {
+            saveFormData();
+        });
     }
 
     // Handle back button functionality
@@ -113,7 +97,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (backButton) {
         backButton.addEventListener('click', () => {
             saveFormData();
-            window.history.back();
         });
     }
 });
