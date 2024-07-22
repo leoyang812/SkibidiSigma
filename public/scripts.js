@@ -1,30 +1,36 @@
 document.addEventListener("DOMContentLoaded", () => {
     // Initialize autocomplete for address inputs
     function initializeAutocomplete(inputElement) {
-        new google.maps.places.Autocomplete(inputElement, {
-            types: ['address'],
-            componentRestrictions: { country: 'ca' }
-        });
+        if (inputElement) {
+            new google.maps.places.Autocomplete(inputElement, {
+                types: ['address'],
+                componentRestrictions: { country: 'ca' } // Restrict results to Canada
+            });
+        }
     }
 
     // Initialize autocomplete for address inputs on page load
     const startLocationInput = document.getElementById('startLocation');
-    const endLocationInput = document.getElementById('endLocation');
+    const endLocationInput = document.getElementById('end-address'); // Changed to match step3.html
 
     if (startLocationInput) initializeAutocomplete(startLocationInput);
     if (endLocationInput) initializeAutocomplete(endLocationInput);
 
     // Initialize autocomplete for waypoints
     function initializeWaypointAutocomplete(waypointElement) {
-        new google.maps.places.Autocomplete(waypointElement, {
-            types: ['address'],
-            componentRestrictions: { country: 'ca' }
-        });
+        if (waypointElement) {
+            new google.maps.places.Autocomplete(waypointElement, {
+                types: ['address'],
+                componentRestrictions: { country: 'ca' } // Restrict results to Canada
+            });
+        }
     }
 
     // Add a waypoint input field
     function addWaypoint() {
         const waypointsContainer = document.getElementById('waypointsContainer');
+        if (!waypointsContainer) return;
+
         const waypointInput = document.createElement('input');
         waypointInput.classList.add('waypoint');
         waypointInput.type = 'text';
@@ -56,23 +62,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Handle form submission
     const routeForm = document.getElementById('routeForm');
-    if (routeForm) {
-        routeForm.addEventListener('submit', async function(event) {
+    const detailsForm = document.getElementById('details-form');
+    const reviewForm = document.getElementById('review-form');
+
+    async function handleSubmit(formElement) {
+        formElement.addEventListener('submit', async function(event) {
             event.preventDefault();
 
             const addresses = [];
-            addresses.push({ address: startLocationInput.value });
+            if (startLocationInput) addresses.push({ address: startLocationInput.value });
+            
+            if (document.querySelectorAll('#waypointsContainer .waypoint')) {
+                document.querySelectorAll('#waypointsContainer .waypoint').forEach(waypointInput => {
+                    addresses.push({ address: waypointInput.value });
+                });
+            }
+            
+            if (endLocationInput) addresses.push({ address: endLocationInput.value });
 
-            document.querySelectorAll('#waypointsContainer .waypoint').forEach(waypointInput => {
-                addresses.push({ address: waypointInput.value });
-            });
+            const totalFreight = document.getElementById('totalFreight')?.value;
+            const numTrucks = document.getElementById('numTrucks')?.value;
+            const truckCapacity = document.getElementById('truckCapacity')?.value;
 
-            addresses.push({ address: endLocationInput.value });
-
-            const totalFreight = document.getElementById('totalFreight').value;
-            const numTrucks = document.getElementById('numTrucks').value;
-            const truckCapacity = document.getElementById('truckCapacity').value;
-
+            // Replace with your API endpoint
             const response = await fetch('/api/optimize', {
                 method: 'POST',
                 headers: {
@@ -87,12 +99,17 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             const result = await response.json();
+            // Handle result
             console.log(result);
         });
     }
+
+    if (routeForm) handleSubmit(routeForm);
+    if (detailsForm) handleSubmit(detailsForm);
+    if (reviewForm) handleSubmit(reviewForm);
 });
 
-// Initialize the map (optional)
+// Initialize the map on step5.html
 function initMap() {
     const mapOptions = {
         center: { lat: 45.4215, lng: -75.6972 }, // Default center is Ottawa
@@ -101,6 +118,27 @@ function initMap() {
     };
 
     const map = new google.maps.Map(document.getElementById('map'), mapOptions);
+
+    // Dummy route for demonstration
+    const route = [
+        { lat: 45.4215, lng: -75.6972 }, // Ottawa
+        { lat: 46.8139, lng: -71.2082 }  // Quebec City
+    ];
+
+    const path = new google.maps.Polyline({
+        path: route,
+        geodesic: true,
+        strokeColor: '#FF0000',
+        strokeOpacity: 1.0,
+        strokeWeight: 2
+    });
+
+    path.setMap(map);
 }
 
-window.onload = initMap;
+// Call initMap if you need a map display
+window.onload = () => {
+    if (document.getElementById('map')) {
+        initMap();
+    }
+};

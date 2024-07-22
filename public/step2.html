@@ -12,7 +12,7 @@
     <div class="cover"></div>
     <div class="container">
         <h1>Route Optimization - Step 2</h1>
-        <form action="step3.html" method="GET" id="waypoint-form">
+        <form action="step3.html" method="GET" id="routeForm">
             <div id="waypointsContainer">
                 <!-- Waypoints will be added here -->
             </div>
@@ -21,39 +21,5 @@
             <button type="button" onclick="location.href='index.html'">Back</button>
         </form>
     </div>
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            function initializeAutocomplete(inputElement) {
-                new google.maps.places.Autocomplete(inputElement, {
-                    types: ['address'],
-                    componentRestrictions: { country: 'ca' }
-                });
-            }
-
-            function addWaypoint() {
-                const waypointsContainer = document.getElementById('waypointsContainer');
-                const waypointInput = document.createElement('input');
-                waypointInput.type = 'text';
-                waypointInput.placeholder = 'Add waypoint address';
-                initializeAutocomplete(waypointInput);
-
-                const waypointDiv = document.createElement('div');
-                waypointDiv.classList.add('form-group');
-                waypointDiv.appendChild(waypointInput);
-
-                const removeButton = document.createElement('button');
-                removeButton.type = 'button';
-                removeButton.textContent = 'Remove';
-                removeButton.addEventListener('click', () => {
-                    waypointsContainer.removeChild(waypointDiv);
-                });
-                waypointDiv.appendChild(removeButton);
-
-                waypointsContainer.appendChild(waypointDiv);
-            }
-
-            document.getElementById('addWaypoint').addEventListener('click', addWaypoint);
-        });
-    </script>
 </body>
 </html>
