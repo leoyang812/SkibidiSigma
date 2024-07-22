@@ -1,15 +1,16 @@
+/* styles.css */
 body {
     font-family: Arial, sans-serif;
-    background: #f0f0f0;
-    color: #333;
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+    background-color: #f4f4f4;
 }
 
 header {
-    background: #333;
-    color: #fff;
-    padding: 10px 20px;
+    background-color: #007BFF;
+    color: white;
+    padding: 20px;
     text-align: center;
 }
 
@@ -17,49 +18,63 @@ main {
     padding: 20px;
 }
 
-form div {
-    margin-bottom: 15px;
+section {
+    margin-bottom: 20px;
+}
+
+h2 {
+    color: #333;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
 }
 
 label {
-    display: block;
+    margin: 10px 0 5px;
     font-weight: bold;
 }
 
-input, select, button {
+input[type="text"], input[type="number"], select {
     width: 100%;
     padding: 10px;
-    margin-top: 5px;
+    margin: 5px 0 20px;
+    border: 1px solid #ccc;
     border-radius: 4px;
-    border: 1px solid #ddd;
 }
 
 button {
-    background-color: #007bff;
+    padding: 10px 15px;
+    background-color: #007BFF;
     color: white;
     border: none;
+    border-radius: 4px;
     cursor: pointer;
+    font-size: 16px;
 }
 
 button:hover {
     background-color: #0056b3;
 }
 
-footer {
-    background: #333;
-    color: #fff;
-    padding: 10px 20px;
-    text-align: center;
-    position: fixed;
-    width: 100%;
-    bottom: 0;
+#waypointsContainer {
+    margin-top: 10px;
 }
 
-/* Semi-transparent background image */
-body {
-    background-image: url('images/download.jpg');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    background-repeat: no-repeat;
+input.waypoint {
+    margin-top: 10px;
+}
+
+#map {
+    height: 400px;
+    width: 100%;
+    margin-top: 20px;
+}
+
+footer {
+    background-color: #007BFF;
+    color: white;
+    text-align: center;
+    padding: 10px;
 }

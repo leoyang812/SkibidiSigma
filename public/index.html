@@ -18,24 +18,26 @@
             <form id="routeForm">
                 <div>
                     <label for="startLocation">Start Location:</label>
-                    <input id="startLocation" type="text" placeholder="Start address, city, province">
+                    <input id="startLocation" type="text" placeholder="Start address, city, province" required>
                 </div>
                 <div>
                     <label for="endLocation">End Location:</label>
-                    <input id="endLocation" type="text" placeholder="End address, city, province">
+                    <input id="endLocation" type="text" placeholder="End address, city, province" required>
                 </div>
                 <div>
                     <label for="waypoints">Waypoints:</label>
-                    <input id="waypoints" type="text" placeholder="Add waypoints, city, province">
+                    <div id="waypointsContainer">
+                        <input class="waypoint" type="text" placeholder="Add waypoint address">
+                    </div>
                     <button type="button" id="addWaypoint">Add Waypoint</button>
                 </div>
                 <div>
                     <label for="totalFreight">Total Freight (in cubic feet):</label>
-                    <input id="totalFreight" type="number" placeholder="Total freight">
+                    <input id="totalFreight" type="number" placeholder="Total freight" required>
                 </div>
                 <div>
                     <label for="numTrucks">Number of Trucks:</label>
-                    <input id="numTrucks" type="number" placeholder="Number of trucks">
+                    <input id="numTrucks" type="number" placeholder="Number of trucks" required>
                 </div>
                 <div>
                     <label for="truckCapacity">Truck Capacity (in cubic feet):</label>
@@ -52,7 +54,7 @@
         </section>
         <section>
             <h2>Map</h2>
-            <div id="map" style="height: 400px; width: 100%;"></div>
+            <div id="map"></div>
         </section>
     </main>
     <footer>

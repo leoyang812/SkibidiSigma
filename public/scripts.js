@@ -158,3 +158,44 @@ function initAutocomplete() {
 // Initialize the autocomplete functionality when the window loads
 window.onload = initAutocomplete;
 
+document.addEventListener('DOMContentLoaded', function() {
+    function initializeAutocomplete(inputElement) {
+        new google.maps.places.Autocomplete(inputElement, {
+            types: ['address'],
+            componentRestrictions: { country: 'ca' } // Restrict results to Canada
+        });
+    }
+
+    // Initialize autocomplete for the start and end addresses
+    const startLocationInput = document.getElementById('startLocation');
+    const endLocationInput = document.getElementById('endLocation');
+    initializeAutocomplete(startLocationInput);
+    initializeAutocomplete(endLocationInput);
+
+    // Initialize autocomplete for waypoints
+    function initializeWaypointAutocomplete(waypointElement) {
+        new google.maps.places.Autocomplete(waypointElement, {
+            types: ['address'],
+            componentRestrictions: { country: 'ca' } // Restrict results to Canada
+        });
+    }
+
+    function addWaypoint() {
+        const waypointInput = document.createElement('input');
+        waypointInput.classList.add('waypoint');
+        waypointInput.type = 'text';
+        waypointInput.placeholder = 'Add waypoint address';
+        initializeWaypointAutocomplete(waypointInput);
+        document.getElementById('waypointsContainer').appendChild(waypointInput);
+    }
+
+    document.getElementById('addWaypoint').addEventListener('click', addWaypoint);
+
+    // Initialize the map (optional)
+    function initMap() {
+        // Map initialization code if needed
+    }
+
+    // Call initMap if you need a map display
+    initMap();
+});
