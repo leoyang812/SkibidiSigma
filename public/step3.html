@@ -5,15 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Route Optimization - Step 3</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_API_KEY&libraries=places" defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBLWsl5v2a7kj2ggZnTuAhHt3WzamVNPE0&libraries=places" defer></script>
     <script src="script.js" defer></script>
 </head>
 <body>
-    <header>
+    <div class="cover"></div>
+    <div class="container">
         <h1>Route Optimization - Step 3</h1>
-    </header>
-    <main>
-        <form action="step4.html" method="GET">
+        <form action="step4.html" method="GET" id="end-form">
             <div class="form-group">
                 <label for="end-address">End Address:</label>
                 <input type="text" id="end-address" name="end-address" required>
@@ -23,10 +22,22 @@
                 <input type="text" id="end-city" name="end-city" required>
             </div>
             <button type="submit">Next</button>
+            <button type="button" onclick="location.href='step2.html'">Back</button>
         </form>
-    </main>
-    <footer>
-        <p>© 2024 Route Optimization Tool</p>
-    </footer>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            function initializeAutocomplete(inputElement) {
+                new google.maps.places.Autocomplete(inputElement, {
+                    types: ['address'],
+                    componentRestrictions: { country: 'ca' }
+                });
+            }
+
+            // Initialize autocomplete for the end address
+            const endAddressInput = document.getElementById('end-address');
+            initializeAutocomplete(endAddressInput);
+        });
+    </script>
 </body>
 </html>

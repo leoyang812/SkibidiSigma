@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function initializeAutocomplete(inputElement) {
         new google.maps.places.Autocomplete(inputElement, {
             types: ['address'],
-            componentRestrictions: { country: 'ca' } // Restrict results to Canada
+            componentRestrictions: { country: 'ca' }
         });
     }
 
@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function initializeWaypointAutocomplete(waypointElement) {
         new google.maps.places.Autocomplete(waypointElement, {
             types: ['address'],
-            componentRestrictions: { country: 'ca' } // Restrict results to Canada
+            componentRestrictions: { country: 'ca' }
         });
     }
 
@@ -49,43 +49,47 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Event listener for adding waypoints
-    document.getElementById('addWaypoint').addEventListener('click', addWaypoint);
+    const addWaypointButton = document.getElementById('addWaypoint');
+    if (addWaypointButton) {
+        addWaypointButton.addEventListener('click', addWaypoint);
+    }
 
     // Handle form submission
-    document.getElementById('routeForm').addEventListener('submit', async function(event) {
-        event.preventDefault();
+    const routeForm = document.getElementById('routeForm');
+    if (routeForm) {
+        routeForm.addEventListener('submit', async function(event) {
+            event.preventDefault();
 
-        const addresses = [];
-        addresses.push({ address: startLocationInput.value });
+            const addresses = [];
+            addresses.push({ address: startLocationInput.value });
 
-        document.querySelectorAll('#waypointsContainer .waypoint').forEach(waypointInput => {
-            addresses.push({ address: waypointInput.value });
+            document.querySelectorAll('#waypointsContainer .waypoint').forEach(waypointInput => {
+                addresses.push({ address: waypointInput.value });
+            });
+
+            addresses.push({ address: endLocationInput.value });
+
+            const totalFreight = document.getElementById('totalFreight').value;
+            const numTrucks = document.getElementById('numTrucks').value;
+            const truckCapacity = document.getElementById('truckCapacity').value;
+
+            const response = await fetch('/api/optimize', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    addresses,
+                    totalFreight,
+                    numTrucks,
+                    truckCapacity
+                }),
+            });
+
+            const result = await response.json();
+            console.log(result);
         });
-
-        addresses.push({ address: endLocationInput.value });
-
-        const totalFreight = document.getElementById('totalFreight').value;
-        const numTrucks = document.getElementById('numTrucks').value;
-        const truckCapacity = document.getElementById('truckCapacity').value;
-
-        // Replace with your API endpoint
-        const response = await fetch('/api/optimize', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                addresses,
-                totalFreight,
-                numTrucks,
-                truckCapacity
-            }),
-        });
-
-        const result = await response.json();
-        // Handle result
-        console.log(result);
-    });
+    }
 });
 
 // Initialize the map (optional)
@@ -99,5 +103,4 @@ function initMap() {
     const map = new google.maps.Map(document.getElementById('map'), mapOptions);
 }
 
-// Call initMap if you need a map display
 window.onload = initMap;
